@@ -74,7 +74,7 @@ Pane {
             id: formBackground
             anchors.fill: form
             anchors.centerIn: form
-            color: "#444"
+            color: "#553b4252"
             opacity: config.PartialBlur == "true" ? 0.3 : 1
             z: 1
         }
@@ -83,7 +83,7 @@ Pane {
             id: form
 
             height: virtualKeyboard.state == "visible" ? parent.height - virtualKeyboard.implicitHeight : parent.height
-            width: parent.width / 2.5
+            width: Math.round(parent.width / 3)
             anchors.horizontalCenter: config.FormPosition == "center" ? parent.horizontalCenter : undefined
             anchors.left: config.FormPosition == "left" ? parent.left : undefined
             anchors.right: config.FormPosition == "right" ? parent.right : undefined
@@ -221,6 +221,27 @@ Pane {
             cache: true
             clip: true
             mipmap: true
+
+            ShaderEffectSource {
+                id: shader
+                sourceItem: backgroundImage
+                width: formBackground.width
+                height: root.height
+
+                anchors{
+                    left: parent.left
+                    verticalCenter: parent.verticalCenter
+                }
+
+                sourceRect: Qt.rect(x,y, width, height)
+            }
+
+            GaussianBlur {
+                anchors.fill: shader
+                source: shader
+                radius: config.BlurRadius
+                samples: config.BlurSamples
+            }
         }
 
         MouseArea {
